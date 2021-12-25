@@ -1,5 +1,6 @@
-on: 
-  [push]
+on:
+  push:
+    branches: ['master']
 
 jobs:
   update_notebook:
@@ -12,22 +13,16 @@ jobs:
       uses: actions/setup-python@v1
       with:
         python-version: '3.x' 
-    - name: Install Python dependencies
+    - name: install python dependencies
       run: pip3 install -r requirements.txt
     - name: update data
-      run: python3 genderstat.py
-    - name: run notebook
-      run: |
-        pip install papermill ipykernel jupyter pandas numpy matplotlib
-        python3 -m ipykernel install --user --name python3
-        #sudo chmod -R 777 .
-        papermill --kernel python3 graph.ipynb graph.ipynb
+      run: python3 twitter_scraper.py
     - name: Commit files
       run: |
         git config --local user.email "tomsurayo@gmail.com"
         git config --local user.name "ninabcdefghi"
         git commit -m "Add changes" -a
-    - name: Push changes
+    - name: push changes
       uses: ad-m/github-push-action@master
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
